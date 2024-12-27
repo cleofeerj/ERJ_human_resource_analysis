@@ -1,0 +1,93 @@
+-- What is the gender breakdown of employees in the company?
+-- What is the race/ethnicity breakdown of employees in the company?
+-- What is the age distribution of employees in the company?
+-- How many employees work at headquarters versus remote locations?
+-- What is the average length of employment for employees who have been terminated?
+-- How does the gender distribution vary across departments and job titles?
+-- What is the distribution of job titles across the company?
+-- Which department has the highest turnover rate?
+-- What is the distribution of employees across locations by state?
+-- How has the company's employee count changed over time based on hire and term dates?
+-- What is the tenure distribution for each department?
+
+Steps: 
+
+
+-- 1.) DUPLICATE DATASET **** DONE ***
+-- 2.0) CHANGE THE "id" name to "emp_id"
+-- 2.1) STANDARDIZE DATA TYPES
+-- 3.0) ADD COLUMN - "age"
+-- 3.1) CLEAN THE OUTLIERS such as NEGATIVE Values
+-- 4.) ANSWER EVERY QUESTION FOR ANALYSIS
+
+
+
+Steps made: 
+
+* Duplicate dataset - Created a table with similar columns ("hr_dataset_dupli"), and inserted all the values from the original dataset ("human resource").
+* Changed the column name "ï»¿id" to new name "emp_id". Changed also the data type from "Text" to "VARCHAR(20)".
+
+** The data on the birthdate && hire_date have "/" instead of "-". Checked every single data, converted the inconsistent data from string date to MM/DD/YYYY format to a DATE object using 		STR_TO_DATE, and then format it to the standard YYYY-MM-DD format using DATE_FORMAT.
+** SINCE hire_date & birthdate are changed to object, change the data type FROM text to DATE.
+
+** The data on the "termdate" are like '%Y-%m-%d %H:%i:%s UTC'. Updated the values to date only format like `YYYY-MM-DD`. 
+** Since there are a lot of blank data on the termdate, NULL Values are inserted to change the data type from "text" to "DATE" effectively.
+
+*** ADDED 'age' column for analysis. Then subtracted the difference of the birthdates and current date to get the age in terms of Years.
+		After the calculation, there were negative ages (like -40). Classified the Minimum and Maximum ages, then counted the outliers ((-) values) to exclude from analysis.
+
+
+EXTRA CURICULARS:
+* Replaced NULL values to (0000-00-00) in termdate indicating that they are still in the job.
+
+
+
+
+CHALLENGES: 
+
+* Cannot detect the NULL in the termdate column as NULL even visible. Disabled the Strict Mode to effectively change. 
+
+
+SOLUTIONS FOR THE ASNWERS: 
+
+-- What is the gender breakdown of employees in the company?
+	** Counted every workers in each gender that are ages 18 and above that are still active.
+
+-- What is the race/ethnicity breakdown of employees in the company?
+	** Counted every workers in each race that are ages 18 and above that are still active.
+
+-- What is the age distribution of employees in the company?
+	** Identified every single ages together with the gender, and labeled depending on the range.
+
+-- How many employees work at headquarters versus remote locations?
+	** Counted each workers in each locations that are ages 18 and above that are still active.
+
+-- What is the average length of employment for employees who have been terminated?
+	** Got the difference of the termdate and hire date and divided by 365 (for approximation in terms of Years of active service), 
+		filtered ages 18 and above and that are not active and the terminated on or before the current date.
+
+-- How does the gender distribution vary across departments and job titles?
+	** Got the Gender, department, and count the workers in every department ages 18 and above that are still active.
+
+-- What is the distribution of job titles across the company?
+	** Got the jobtitle, and count the workers in every jobtitles ages 18 and above that are still active.
+
+
+-- Which department has the highest turnover rate?
+	** Created a dynamic column for total_count, terminated_count to calaculate the termination rate which is the quotient of the two
+		dynamic column. In line to that, a subquery to get the values for the dynamic columns.
+
+-- What is the distribution of employees across locations by state?
+	** Counted every active and 18 above workers across different states.
+
+
+-- How has the company's employee count changed over time based on hire and term dates?
+	** Created dynamic columns - year (year from hire_date extracted), terminations, hire - terminations AS net_change, round((hires - 		terminations)/hires * 100, 2) AS net_change_percentage - which got from the subquery.
+
+
+
+-- What is the tenure distribution for each department?
+
+	** Got the number of days between hire_date and term_date, then convert it to years.
+
+
